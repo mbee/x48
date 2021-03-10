@@ -69,6 +69,7 @@ char   *serialLine;
 int     useXShm;
 int     useDebugger;
 int	netbook;
+int screenOnly;
 int	throttle;
 int     initialize;
 int     resetOnStartup;
@@ -110,6 +111,8 @@ get_resources()
                                             "DisassemblerMnemonics");
 
   netbook = get_boolean_resource("netbook", "Netbook");
+
+  screenOnly = get_boolean_resource("screenOnly", "ScreenOnly");
 
   throttle = get_boolean_resource("throttle", "Throttle");
 }

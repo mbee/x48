@@ -96,6 +96,8 @@ static XrmOptionDescRec options[] = {
   { "-netbook",     "*netbook",       XrmoptionNoArg,    (void *)"False" },
   { "+netbook",     "*netbook",       XrmoptionNoArg,    (void *) "True" },
 
+  { "-screenOnly",  "*screenOnly",    XrmoptionNoArg,    (void *) "True" },
+
   { "-throttle",    "*throttle",      XrmoptionNoArg,    (void *)"False" },
   { "+throttle",    "*throttle",      XrmoptionNoArg,    (void *) "True" },
 

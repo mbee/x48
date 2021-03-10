@@ -48,6 +48,7 @@ extern int     useSerial;
 extern int     useXShm;
 extern int     useDebugger;
 extern int     netbook;
+extern int     screenOnly;
 extern int     throttle;
 extern char   *serialLine;
 extern int     initialize;

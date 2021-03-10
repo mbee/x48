@@ -96,6 +96,7 @@ where options include:\n\
     -xrm        <resource>       set Xresource <resource>\n\
     -/+throttle			 turn off/on speed emulation\n\
     -/+netbook			 turn off/on netbook layout\n\
+    -screenOnly			 only display LCD screen\n\
 \n", VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL, progname);
 
   fflush(stdout);

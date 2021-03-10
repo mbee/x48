@@ -114,6 +114,8 @@ where options include:
     [\-xrm        <resource>     set Xresource <resource>
 .br
     [\-/+netbook                 Enable/Disable netbook look
+.br
+    [\-screenOnly                Only display the LCD screen, not the keyboard nor the frames
 
 
 .SH DESCRIPTION
@@ -266,6 +268,9 @@ You can not change the size of \fIx48\fR, but you can set the location of \fIx48
 
 .TP
 .B *Netbook:
+
+.TP
+.B *ScreenOnly:
 
 .SH COLORS
 The x48 is trying to look like a particular device.

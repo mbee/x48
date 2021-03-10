@@ -164,6 +164,14 @@ typedef struct keypad_t {
   Pixmap	pixmap;
 } keypad_t;
 
+typedef struct {
+  unsigned long   flags;
+  unsigned long   functions;
+  unsigned long   decorations;
+  long            inputMode;
+  unsigned long   status;
+} Hints;
+
 keypad_t  keypad;
 color_t  *colors;
 
@@ -2586,11 +2594,17 @@ CreateDispWindow()
   disp.w = DISPLAY_WIDTH;
   disp.h = DISPLAY_HEIGHT;
 
-  disp.win = XCreateSimpleWindow(dpy, mainW,
-			(int)DISPLAY_OFFSET_X, (int)DISPLAY_OFFSET_Y,
-			disp.w, disp.h, 0,
-			COLOR(BLACK), COLOR(LCD));
-
+  if (screenOnly) {
+    disp.win = XCreateSimpleWindow(dpy, mainW,
+        0, 0,
+        disp.w, disp.h, 0,
+        COLOR(BLACK), COLOR(LCD));
+  } else {
+    disp.win = XCreateSimpleWindow(dpy, mainW,
+        (int)DISPLAY_OFFSET_X, (int)DISPLAY_OFFSET_Y,
+        disp.w, disp.h, 0,
+        COLOR(BLACK), COLOR(LCD));
+  }
   disp.mapped = 1;
 
   xswa.event_mask = ExposureMask | StructureNotifyMask;
@@ -2767,15 +2781,7 @@ CreateDispWindow()
   return;
 }
 
-int
-#ifdef __FunctionProto__
-CreateWindows(int argc, char **argv)
-#else
-CreateWindows(argc, argv)
-int    argc;
-char **argv;
-#endif
-{
+int CreateWindows(int argc, char **argv) {
   XSizeHints	hint, ih;
   XWMHints	wmh;
   XClassHint	clh;
@@ -2889,11 +2895,16 @@ char **argv;
   /*
    * create the window
    */
-  width = KEYBOARD_WIDTH + 2 * SIDE_SKIP;
-  if (netbook) {
-      height = KEYBOARD_HEIGHT;
+  if (screenOnly) {
+    width = DISPLAY_WIDTH;
+    height = DISPLAY_HEIGHT;
   } else {
-      height = DISPLAY_OFFSET_Y + DISPLAY_HEIGHT + DISP_KBD_SKIP + KEYBOARD_HEIGHT + BOTTOM_SKIP;
+    width = KEYBOARD_WIDTH + 2 * SIDE_SKIP;
+    if (netbook) {
+        height = KEYBOARD_HEIGHT;
+    } else {
+        height = DISPLAY_OFFSET_Y + DISPLAY_HEIGHT + DISP_KBD_SKIP + KEYBOARD_HEIGHT + BOTTOM_SKIP;
+    }
   }
 
   mainW = XCreateWindow(dpy, RootWindow(dpy, screen),
@@ -2958,6 +2969,16 @@ char **argv;
          CWBitGravity | CWWinGravity;
   XChangeWindowAttributes(dpy, mainW, mask, &xswa);
   XMoveWindow(dpy, mainW, hint.x, hint.y);
+
+  if (screenOnly) {
+    Hints   hints;
+    Atom    property;
+    hints.flags = 2;
+    hints.decorations = 0;
+    property = XInternAtom(dpy,"_MOTIF_WM_HINTS",True);
+    XChangeProperty(dpy,mainW,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+  }
+
 
   /*
    * create the icon
